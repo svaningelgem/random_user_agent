@@ -22,7 +22,11 @@ class Chipset(Enum):
     def check_if_ok_for_os(self, os: OS):
         if (
             (os == OS.Linux and self not in (Chipset.x86, Chipset.x64))
-            or (os == OS.MacOSX and self not in (Chipset.Intel, Chipset.UIntel, Chipset.PPC, Chipset.UPPC))
+            or (
+                os == OS.MacOSX
+                and self
+                not in (Chipset.Intel, Chipset.UIntel, Chipset.PPC, Chipset.UPPC)
+            )
             # or: ignored on Windows
         ):
             raise ValueError(f"Invalid chipset {self} for os {os}.")

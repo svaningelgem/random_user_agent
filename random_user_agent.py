@@ -178,7 +178,9 @@ class RandomUserAgent:
 
     def _randomize_firefox(self):
         ua = "Mozilla/5.0 "
-        random_date = _random_date(date(2011, 1, 1), datetime.now().date()).strftime("%Y%m%d")
+        random_date = _random_date(date(2011, 1, 1), datetime.now().date()).strftime(
+            "%Y%m%d"
+        )
         ver = [
             f"Gecko/{random_date} Firefox/{random.randint(5, 7)}.0",
             f"Gecko/{random_date} Firefox/{random.randint(5, 7)}.0.1",
@@ -208,7 +210,9 @@ class RandomUserAgent:
     def _randomize_safari(self):
         ua = "Mozilla/5.0 "
 
-        saf = f"{random.randint(531, 535)}.{random.randint(1, 50)}.{random.randint(1, 7)}"
+        saf = (
+            f"{random.randint(531, 535)}.{random.randint(1, 50)}.{random.randint(1, 7)}"
+        )
         if random.randint(0, 1) == 0:
             ver = f"{random.randint(4, 5)}.{random.randint(0, 1)}"
         else:
