@@ -1,7 +1,8 @@
-from enums import OS, Chipset, Browser, Language
 import random
-from datetime import date, timedelta, datetime
 from copy import deepcopy
+from datetime import date, datetime, timedelta
+
+from enums import OS, Browser, Chipset, Language
 
 
 def _random_date(start: datetime.date, end: datetime.date):
@@ -25,6 +26,7 @@ class RandomUserAgent:
 
     Defaults: completely randomized
     """
+
     def __init__(self):
         self._state = _State()
 
@@ -46,6 +48,7 @@ class RandomUserAgent:
     @property
     def chipset(self):
         return self._state.chipset
+
     ##################################################################
 
     ##################################################################
@@ -70,6 +73,7 @@ class RandomUserAgent:
     def ios(self):
         self._state.os = OS.iOS
         return self
+
     ##################################################################
 
     ##################################################################
@@ -98,6 +102,7 @@ class RandomUserAgent:
     def uppc(self):
         self._state.chipset = Chipset.UPPC
         return self
+
     ##################################################################
 
     ##################################################################
@@ -122,12 +127,14 @@ class RandomUserAgent:
     def chrome(self):
         self._state.browser = Browser.Chrome
         return self
+
     ##################################################################
 
     ##################################################################
     def set_language(self, lang: Language):
         self._state.language = lang
         return self
+
     ##################################################################
 
     def _validate(self):
@@ -171,27 +178,27 @@ class RandomUserAgent:
 
     def _randomize_firefox(self):
         ua = "Mozilla/5.0 "
-        random_date = _random_date(date(2011, 1, 1), datetime.now().date()).strftime('%Y%m%d')
+        random_date = _random_date(date(2011, 1, 1), datetime.now().date()).strftime("%Y%m%d")
         ver = [
-            f'Gecko/{random_date} Firefox/{random.randint(5, 7)}.0',
-            f'Gecko/{random_date} Firefox/{random.randint(5, 7)}.0.1',
-            f'Gecko/{random_date} Firefox/3.6.{random.randint(1, 20)}',
-            f'Gecko/{random_date} Firefox/3.8',
+            f"Gecko/{random_date} Firefox/{random.randint(5, 7)}.0",
+            f"Gecko/{random_date} Firefox/{random.randint(5, 7)}.0.1",
+            f"Gecko/{random_date} Firefox/3.6.{random.randint(1, 20)}",
+            f"Gecko/{random_date} Firefox/3.8",
         ]
 
         if self.os == OS.Windows:
-            ua += f'(Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}; '
-            ua += self.language.value + '; '
-            ua += f'rv:1.9.{random.randint(0, 2)}.20) '
+            ua += f"(Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}; "
+            ua += self.language.value + "; "
+            ua += f"rv:1.9.{random.randint(0, 2)}.20) "
             ua += random.choice(ver)
         elif self.os == OS.Linux:
-            ua += f'(X11; Linux {self.chipset.value}; '
-            ua += f'rv:{random.randint(5, 7)}.0) '
+            ua += f"(X11; Linux {self.chipset.value}; "
+            ua += f"rv:{random.randint(5, 7)}.0) "
             ua += random.choice(ver)
         elif self.os == OS.MacOSX:
-            ua += f'(Macintosh; {self.chipset.value} '
-            ua += f'Mac OS X 10_{random.randint(5, 7)}_{random.randint(0, 9)} '
-            ua += f'rv:{random.randint(2, 6)}.0) '
+            ua += f"(Macintosh; {self.chipset.value} "
+            ua += f"Mac OS X 10_{random.randint(5, 7)}_{random.randint(0, 9)} "
+            ua += f"rv:{random.randint(2, 6)}.0) "
             ua += random.choice(ver)
         else:
             raise NotImplementedError
@@ -199,45 +206,45 @@ class RandomUserAgent:
         return ua
 
     def _randomize_safari(self):
-        ua = 'Mozilla/5.0 '
+        ua = "Mozilla/5.0 "
 
-        saf = f'{random.randint(531, 535)}.{random.randint(1, 50)}.{random.randint(1, 7)}'
+        saf = f"{random.randint(531, 535)}.{random.randint(1, 50)}.{random.randint(1, 7)}"
         if random.randint(0, 1) == 0:
-            ver = f'{random.randint(4, 5)}.{random.randint(0, 1)}'
+            ver = f"{random.randint(4, 5)}.{random.randint(0, 1)}"
         else:
-            ver = f'{random.randint(4, 5)}.0.{random.randint(1, 5)}'
+            ver = f"{random.randint(4, 5)}.0.{random.randint(1, 5)}"
 
         if self.os == OS.Windows:
-            ua += f'(Windows; U; Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}) '
-            ua += f'AppleWebKit/{saf} (KHTML, like Gecko) '
-            ua += f'Version/{ver} '
-            ua += f'Safari/{saf}'
+            ua += f"(Windows; U; Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}) "
+            ua += f"AppleWebKit/{saf} (KHTML, like Gecko) "
+            ua += f"Version/{ver} "
+            ua += f"Safari/{saf}"
         elif self.os == OS.MacOSX:
-            ua += f'(Macintosh; U; {self.chipset.value} '
-            ua += f'Mac OS X 10_{random.randint(5, 7)}_{random.randint(0, 9)} '
-            ua += f'rv:{random.randint(2, 6)}.0; '
-            ua += f'{self.language.value}) '
-            ua += f'AppleWebKit/{saf} (KHTML, like Gecko) '
-            ua += f'Version/{ver} '
-            ua += f'Safari/{saf}'
+            ua += f"(Macintosh; U; {self.chipset.value} "
+            ua += f"Mac OS X 10_{random.randint(5, 7)}_{random.randint(0, 9)} "
+            ua += f"rv:{random.randint(2, 6)}.0; "
+            ua += f"{self.language.value}) "
+            ua += f"AppleWebKit/{saf} (KHTML, like Gecko) "
+            ua += f"Version/{ver} "
+            ua += f"Safari/{saf}"
         else:
             raise NotImplementedError
 
         return ua
 
     def _randomize_iexplorer(self):
-        ua = f'Mozilla/{random.randint(4, 5)}.0 '
+        ua = f"Mozilla/{random.randint(4, 5)}.0 "
         ie_extra = [
-            '',
-            f'; .NET CLR 1.1.{random.randint(4320, 4325)}',
-            '; WOW64',
+            "",
+            f"; .NET CLR 1.1.{random.randint(4320, 4325)}",
+            "; WOW64",
         ]
 
         if self.os == OS.Windows:
-            ua += f'(compatible; '
-            ua += f'MSIE {random.randint(5, 9)}.0; '
-            ua += f'Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}; '
-            ua += f'Trident/{random.randint(3, 5)}.{random.randint(0, 1)})'
+            ua += "(compatible; "
+            ua += f"MSIE {random.randint(5, 9)}.0; "
+            ua += f"Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}; "
+            ua += f"Trident/{random.randint(3, 5)}.{random.randint(0, 1)})"
             ua += random.choice(ie_extra)
         else:
             raise NotImplementedError
@@ -245,25 +252,25 @@ class RandomUserAgent:
         return ua
 
     def _randomize_opera(self):
-        ua = f'Opera/{random.randint(8, 9)}.{random.randint(10, 99)} '
+        ua = f"Opera/{random.randint(8, 9)}.{random.randint(10, 99)} "
 
         op_extra = [
-            '',
-            f'; .NET CLR 1.1.{random.randint(4320, 4325)}',
-            '; WOW64',
+            "",
+            f"; .NET CLR 1.1.{random.randint(4320, 4325)}",
+            "; WOW64",
         ]
 
         if self.os == OS.Linux:
-            ua += f'(X11; Linux {self.chipset.value}; U; '
-            ua += f'{self.language.value}) '
-            ua += f'Presto/2.9.{random.randint(160, 190)} '
-            ua += f'Version/{random.randint(10, 12)}.00'
+            ua += f"(X11; Linux {self.chipset.value}; U; "
+            ua += f"{self.language.value}) "
+            ua += f"Presto/2.9.{random.randint(160, 190)} "
+            ua += f"Version/{random.randint(10, 12)}.00"
             ua += random.choice(op_extra)
         elif self.os == OS.Windows:
-            ua += f'(Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}; U; '
-            ua += f'{self.language.value}) '
-            ua += f'Presto/2.9.{random.randint(160, 190)} '
-            ua += f'Version/{random.randint(10, 12)}.00'
+            ua += f"(Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}; U; "
+            ua += f"{self.language.value}) "
+            ua += f"Presto/2.9.{random.randint(160, 190)} "
+            ua += f"Version/{random.randint(10, 12)}.00"
             ua += random.choice(op_extra)
         else:
             raise NotImplementedError
@@ -271,27 +278,27 @@ class RandomUserAgent:
         return ua
 
     def _randomize_chrome(self):
-        ua = 'Mozilla/5.0'
-        saf = f'{random.randint(531, 536)}.{random.randint(0, 2)}'
+        ua = "Mozilla/5.0"
+        saf = f"{random.randint(531, 536)}.{random.randint(0, 2)}"
 
         if self.os == OS.Linux:
-            ua += f'(X11; Linux {self.chipset.value}) '
-            ua += f'AppleWebKit/{saf} '
-            ua += f'(KHTML, like Gecko) Chrome/{random.randint(13, 15)}.0.{random.randint(800, 899)}.0 '
-            ua += f'Safari/{saf}'
+            ua += f"(X11; Linux {self.chipset.value}) "
+            ua += f"AppleWebKit/{saf} "
+            ua += f"(KHTML, like Gecko) Chrome/{random.randint(13, 15)}.0.{random.randint(800, 899)}.0 "
+            ua += f"Safari/{saf}"
         elif self.os == OS.Windows:
-            ua += f'(Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}) '
-            ua += f'AppleWebKit/{saf} '
-            ua += f'(KHTML, like Gecko) '
-            ua += f'Chrome/{random.randint(13, 15)}.0.{random.randint(800, 899)}.0 '
-            ua += f'Safari/{saf}'
+            ua += f"(Windows NT {random.randint(5, 6)}.{random.randint(0, 1)}) "
+            ua += f"AppleWebKit/{saf} "
+            ua += "(KHTML, like Gecko) "
+            ua += f"Chrome/{random.randint(13, 15)}.0.{random.randint(800, 899)}.0 "
+            ua += f"Safari/{saf}"
         elif self.os == OS.MacOSX:
-            ua += f'(Macintosh; U; {self.chipset.value} Mac OS X '
-            ua += f'10_{random.randint(5, 7)}_{random.randint(0, 9)}) '
-            ua += f'AppleWebKit/{saf} '
-            ua += f'(KHTML, like Gecko) '
-            ua += f'Chrome/{random.randint(13, 15)}.0.{random.randint(800, 899)}.0 '
-            ua += f'Safari/{saf}'
+            ua += f"(Macintosh; U; {self.chipset.value} Mac OS X "
+            ua += f"10_{random.randint(5, 7)}_{random.randint(0, 9)}) "
+            ua += f"AppleWebKit/{saf} "
+            ua += "(KHTML, like Gecko) "
+            ua += f"Chrome/{random.randint(13, 15)}.0.{random.randint(800, 899)}.0 "
+            ua += f"Safari/{saf}"
         else:
             raise NotImplementedError
 
@@ -312,18 +319,15 @@ class RandomUserAgent:
                     error_counter -= 1
 
                 # Call it like _randomize_firefox
-                return getattr(self, f'_randomize_{self._state.browser.name.lower()}')()
+                return getattr(self, f"_randomize_{self._state.browser.name.lower()}")()
             except NotImplementedError:
                 error_counter -= 1
                 # restore previous state to try something else
                 self._state = deepcopy(current_state)
-                pass
 
         raise ValueError("Invalid combination passed. Can't handle this!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     rua = RandomUserAgent()
-    print(
-        rua.linux().firefox().build()
-    )
+    print(rua.linux().firefox().build())
